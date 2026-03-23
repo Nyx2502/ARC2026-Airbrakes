@@ -1,0 +1,51 @@
+// Secretly the main.ino tab (Arduino IDE doesnt like the name "main" apparently)
+//Libraries
+#include <Servo.h> // servo library (PWM stuff, angle calculations, etc)
+#include <Wire.h> // Stuff for I2C connections
+#include "SparkFun_BMP581_Arduino_Library.h" //Barometer stuff
+#include <cmath> // Math becuase C++ can't do exponents without a library
+#include <ICM_20948.h> //Gyro/Accelerometer stuff
+
+//Definistions
+#define SERIAL_PORT Serial
+#define WIRE_PORT Wire
+#define AD0_VAL 1
+
+//Variables
+int pos = -23;  // initial position of the servo. change as necessary
+float Velocity = 0; // intialize velocity as 0 because why not
+float Height;
+float LastHeight;
+float Pressure = data.pressure;
+float HeightAboveSeaLevel;
+float HeightAboveGround;
+const int MaxServoAngle = 50;  //max and min servo angles accorinding to the 2026 airbrakes system. change as necessary
+const int MinServoAngle = -23;
+const int TargetApogee = 750;  //CHANGE PER RULES
+static float lastHeight = 0; // needed for velocity Calculation
+static unsigned long lastTime = 0; // needed for velocty Calculations.
+
+//Sensors & object declarations
+Servo myServo;
+BMP581 pressureSensor;
+ICM_20948_I2C myICM;
+
+//I2C Declaration
+uint8_t i2cAddress = BMP581_I2C_ADDRESS_SECONDARY;  //0x46 adress for the BMP 581 sensor
+
+// ↓ IMPORTANT CODE STARTS HERE!!! ↓
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Code is running young children");
+
+  BarometerSetup();  // Running the Setup part of the barometer code
+  ICMSetup(); // Running the Setup part of the ICM code
+}
+
+void loop() {
+  BarometerLoop(); // running the Loop part of the barometer code
+  ICMLoop(); // running the Loop part of the ICM code
+
+  Height = getHeight(Pressure);
+  //get
+}
