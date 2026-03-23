@@ -1,0 +1,27 @@
+//Height Calculations
+float getHeight(float Airpressure) {
+  Pressure = Airpressure;
+  Pressure = Pressure / 100;
+  Pressure = Pressure / 1013.25;
+  Pressure = pow(Pressure, 0.190284);
+  Pressure = 1 - Pressure;
+  Height = Pressure * 145366.45;
+
+  return Height;
+}
+
+//Velocity Calculations
+float getVelocity(Height) {
+
+  unsigned long currentTime = micros();
+  float dt = (currentTime - lastTime) / 1000000.0;  // seconds
+
+  if (dt > 0) {
+    velocity = (Height - lastHeight) / dt;
+  }
+
+  lastHeight = Height;
+  lastTime = currentTime;
+
+  return Velocity
+}
